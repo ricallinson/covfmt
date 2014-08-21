@@ -2,7 +2,7 @@ package main
 
 import (
 	"bufio"
-	"os"
+	"io"
 	"strconv"
 )
 
@@ -48,19 +48,10 @@ func writeLcovRecord(filePath string, blocks []*block, w *bufio.Writer) {
 	w.WriteString("end_of_record\n")
 }
 
-func lcov(blocks map[string][]*block, filePath string) {
-
-	f, err := os.Create(filePath)
-	if err != nil {
-		panic(err)
-	}
-	defer f.Close()
-
+func lcov(blocks map[string][]*block, f io.Writer) {
 	w := bufio.NewWriter(f)
-
 	for file, fileBlocks := range blocks {
 		writeLcovRecord(file, fileBlocks, w)
 	}
-
 	w.Flush()
 }

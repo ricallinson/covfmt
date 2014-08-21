@@ -7,8 +7,6 @@ import (
 	"os"
 	"strconv"
 	"strings"
-	"flag"
-	"path/filepath"
 )
 
 type block struct {
@@ -59,25 +57,6 @@ func parseCoverage(coverage io.Reader) map[string][]*block {
 	return blocks
 }
 
-func init() {
-	log.SetFlags(log.Lshortfile)
-}
-
 func main() {
-	source := flag.String("f", "", "Path to the source coverage file.")
-	output := flag.String("o", "", "Path for the output coverage file.")
-	flag.Parse()
-	if *source == "" {
-		flag.PrintDefaults()
-		return
-	}
-	if *output == "" {
-		*output = filepath.Join(filepath.Dir(*source), "lcov.info")
-	}
-	coverage, err := os.Open(*source)
-	if err != nil {
-		log.Fatal("Error opening coverage file:", err)
-	}
-	defer coverage.Close()
-	lcov(parseCoverage(coverage), *output)
+	lcov(parseCoverage(os.Stdin), os.Stdout)
 }

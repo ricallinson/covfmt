@@ -1,6 +1,6 @@
 # covfmt
 
-Utility for converting the go test coverage tools output into the lcov format.
+Utility for converting the go test coverage output into the lcov format.
 
 ## Dev Setup
 
@@ -11,7 +11,7 @@ Utility for converting the go test coverage tools output into the lcov format.
 
 ## Usage
 
-    covfmt -f ./coverage/coverage.out -o ./coverage/lcov.info
+    cat ./coverage/coverage.out | covfmt > ./coverage/lcov.info
 
 ## Testing
 
