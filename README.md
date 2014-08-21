@@ -1,6 +1,6 @@
 # covfmt
 
-Utility for converting the go test coverage output into the lcov format.
+_WORK IN PROGRESS_: Utility for converting the go test coverage output into the lcov format.
 
 ## Dev Setup
 
