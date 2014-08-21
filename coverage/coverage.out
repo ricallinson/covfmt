@@ -1,0 +1,27 @@
+mode: set
+_/Users/allinson/Go/apps/covfmt/lcov.go:9.73,28.27 5 1
+_/Users/allinson/Go/apps/covfmt/lcov.go:39.2,48.34 3 1
+_/Users/allinson/Go/apps/covfmt/lcov.go:28.27,30.45 1 1
+_/Users/allinson/Go/apps/covfmt/lcov.go:30.45,32.21 2 1
+_/Users/allinson/Go/apps/covfmt/lcov.go:35.4,35.81 1 1
+_/Users/allinson/Go/apps/covfmt/lcov.go:32.21,34.5 1 1
+_/Users/allinson/Go/apps/covfmt/lcov.go:51.56,54.16 2 1
+_/Users/allinson/Go/apps/covfmt/lcov.go:57.2,61.39 3 1
+_/Users/allinson/Go/apps/covfmt/lcov.go:65.2,65.11 1 1
+_/Users/allinson/Go/apps/covfmt/lcov.go:54.16,56.3 1 0
+_/Users/allinson/Go/apps/covfmt/lcov.go:61.39,63.3 1 1
+_/Users/allinson/Go/apps/covfmt/main.go:21.52,23.25 1 1
+_/Users/allinson/Go/apps/covfmt/main.go:27.2,43.29 13 1
+_/Users/allinson/Go/apps/covfmt/main.go:23.25,25.3 1 1
+_/Users/allinson/Go/apps/covfmt/main.go:46.57,49.21 3 1
+_/Users/allinson/Go/apps/covfmt/main.go:58.2,58.38 1 1
+_/Users/allinson/Go/apps/covfmt/main.go:61.2,61.15 1 1
+_/Users/allinson/Go/apps/covfmt/main.go:49.21,50.48 1 1
+_/Users/allinson/Go/apps/covfmt/main.go:50.48,52.39 1 1
+_/Users/allinson/Go/apps/covfmt/main.go:55.4,55.36 1 1
+_/Users/allinson/Go/apps/covfmt/main.go:52.39,54.5 1 1
+_/Users/allinson/Go/apps/covfmt/main.go:58.38,60.3 1 0
+_/Users/allinson/Go/apps/covfmt/main.go:64.13,66.2 1 1
+_/Users/allinson/Go/apps/covfmt/main.go:68.13,70.16 2 1
+_/Users/allinson/Go/apps/covfmt/main.go:73.2,74.50 2 1
+_/Users/allinson/Go/apps/covfmt/main.go:70.16,72.3 1 0
