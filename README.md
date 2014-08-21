@@ -1,4 +1,6 @@
-# lcov
+# covfmt
+
+Utility for converting the go test coverage tools output into the lcov format.
 
 ## Dev Setup
 
