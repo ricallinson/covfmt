@@ -2,9 +2,11 @@ package main
 
 import (
 	"bufio"
+	"flag"
 	"io"
 	"log"
 	"os"
+	"path/filepath"
 	"strconv"
 	"strings"
 )
@@ -68,8 +70,8 @@ func lcov(blocks map[string][]*block, f io.Writer) {
 	w.Flush()
 }
 
-func parseCoverageLine(line string) (string, *block, bool) {
-	if line == "mode: set" {
+func parseCoverageLine(line string, prefix string, cutset string) (string, *block, bool) {
+	if strings.HasPrefix(line, "mode:") {
 		return "", nil, false
 	}
 	path := strings.Split(line, ":")
@@ -85,15 +87,18 @@ func parseCoverageLine(line string) (string, *block, bool) {
 	b.endChar, _ = strconv.Atoi(end[1])
 	b.statements, _ = strconv.Atoi(parts[1])
 	b.covered, _ = strconv.Atoi(parts[2])
-	// Remove the underscore (_) from the beginning of the path.
-	return path[0][1:], b, true
+	// Remove the "trim" string from the beginning of the path if CLI option is present.
+	if len(cutset) > 0 {
+		path[0] = strings.TrimLeft(path[0], cutset)
+	}
+	return filepath.Join(prefix, path[0]), b, true
 }
 
-func parseCoverage(coverage io.Reader) map[string][]*block {
+func parseCoverage(coverage io.Reader, prefix string, cutset string) map[string][]*block {
 	scanner := bufio.NewScanner(coverage)
 	blocks := map[string][]*block{}
 	for scanner.Scan() {
-		if f, b, ok := parseCoverageLine(scanner.Text()); ok {
+		if f, b, ok := parseCoverageLine(scanner.Text(), prefix, cutset); ok {
 			// Make sure the filePath is a key in the map.
 			if _, ok := blocks[f]; ok == false {
 				blocks[f] = []*block{}
@@ -108,5 +113,12 @@ func parseCoverage(coverage io.Reader) map[string][]*block {
 }
 
 func main() {
-	lcov(parseCoverage(os.Stdin), os.Stdout)
+	var cutset string
+	flag.StringVar(&cutset, "trim", "", "An optional string that will be trimmed from the front of the source file name.")
+	flag.Parse()
+	var prefix string
+	if len(os.Args) == 2 {
+		prefix = os.Args[1]
+	}
+	lcov(parseCoverage(os.Stdin, prefix, cutset), os.Stdout)
 }
