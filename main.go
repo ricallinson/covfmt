@@ -118,9 +118,9 @@ func parseCoverage(coverage io.Reader, prefix string, cutset string) []*block {
 
 func main() {
 	var cutset string
-	flag.StringVar(&cutset, "trim", "", "An optional string that will be trimmed from the front of the source file name.")
+	flag.StringVar(&cutset, "trim", "", "An optional string that will be trimmed from the front of the source file path.")
 	var prefix string
-	flag.StringVar(&prefix, "prefix", "", "An optional string that will be appended to the front of the source file name.")
+	flag.StringVar(&prefix, "prefix", "", "An optional string that will be appended to the front of the source file path.")
 	flag.Parse()
 	lcov(parseCoverage(os.Stdin, prefix, cutset), os.Stdout)
 }
