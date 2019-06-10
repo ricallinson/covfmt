@@ -12,6 +12,7 @@ import (
 )
 
 type block struct {
+	filepath   string
 	startLine  int
 	startChar  int
 	endLine    int
@@ -20,10 +21,10 @@ type block struct {
 	covered    int
 }
 
-func writeLcovRecord(filePath string, blocks []*block, w *bufio.Writer) {
+func writeLcovRecord(blocks []*block, w *bufio.Writer) {
 
 	w.WriteString("TN:\n")
-	w.WriteString("SF:" + filePath + "\n")
+	w.WriteString("SF:" + blocks[0].filepath + "\n")
 
 	// Loop over functions
 	// FN: line,name
@@ -62,17 +63,23 @@ func writeLcovRecord(filePath string, blocks []*block, w *bufio.Writer) {
 	w.WriteString("end_of_record\n")
 }
 
-func lcov(blocks map[string][]*block, f io.Writer) {
+func lcov(blocks []*block, f io.Writer) {
+	var start int
+	cur := blocks[0].filepath
 	w := bufio.NewWriter(f)
-	for file, fileBlocks := range blocks {
-		writeLcovRecord(file, fileBlocks, w)
+	for i, b := range blocks {
+		if strings.Compare(b.filepath, cur) != 0 {
+			writeLcovRecord(blocks[start:i-1], w)
+			start = i
+			cur = b.filepath
+		}
 	}
 	w.Flush()
 }
 
-func parseCoverageLine(line string, prefix string, cutset string) (string, *block, bool) {
+func parseCoverageLine(line string, prefix string, cutset string) (*block, bool) {
 	if strings.HasPrefix(line, "mode:") {
-		return "", nil, false
+		return nil, false
 	}
 	path := strings.Split(line, ":")
 	parts := strings.Split(path[1], " ")
@@ -81,29 +88,26 @@ func parseCoverageLine(line string, prefix string, cutset string) (string, *bloc
 	end := strings.Split(sections[1], ".")
 	// Populate the block.
 	b := &block{}
+	b.filepath = filepath.Join(prefix, path[0])
 	b.startLine, _ = strconv.Atoi(start[0])
 	b.startChar, _ = strconv.Atoi(start[1])
 	b.endLine, _ = strconv.Atoi(end[0])
 	b.endChar, _ = strconv.Atoi(end[1])
 	b.statements, _ = strconv.Atoi(parts[1])
 	b.covered, _ = strconv.Atoi(parts[2])
-	// Remove the "trim" string from the beginning of the path if CLI option is present.
+	// Remove the "cutset" string from the beginning of the path if the CLI option is present.
 	if len(cutset) > 0 {
 		path[0] = strings.TrimLeft(path[0], cutset)
 	}
-	return filepath.Join(prefix, path[0]), b, true
+	return b, true
 }
 
-func parseCoverage(coverage io.Reader, prefix string, cutset string) map[string][]*block {
+func parseCoverage(coverage io.Reader, prefix string, cutset string) []*block {
 	scanner := bufio.NewScanner(coverage)
-	blocks := map[string][]*block{}
+	blocks := []*block{}
 	for scanner.Scan() {
-		if f, b, ok := parseCoverageLine(scanner.Text(), prefix, cutset); ok {
-			// Make sure the filePath is a key in the map.
-			if _, ok := blocks[f]; ok == false {
-				blocks[f] = []*block{}
-			}
-			blocks[f] = append(blocks[f], b)
+		if b, ok := parseCoverageLine(scanner.Text(), prefix, cutset); ok {
+			blocks = append(blocks, b)
 		}
 	}
 	if err := scanner.Err(); err != nil {

@@ -6,6 +6,8 @@ _WORK IN PROGRESS_: Utility for converting the go test coverage output into the 
 
     go test -coverprofile=coverage.out; cat coverage.out | covfmt > ./lcov.info
 
+    go test -coverprofile=coverage.out; cat coverage.out | covfmt $(pwd) > ./lcov.info
+
 ## Testing
 
     go test -cover
