@@ -82,6 +82,10 @@ func parseCoverageLine(line string, prefix string, cutset string) (*block, bool)
 		return nil, false
 	}
 	path := strings.Split(line, ":")
+	// Remove the "cutset" string from the beginning of the path if the CLI option is present.
+	if len(cutset) > 0 {
+		path[0] = strings.Replace(path[0], cutset, "", -1)
+	}
 	parts := strings.Split(path[1], " ")
 	sections := strings.Split(parts[0], ",")
 	start := strings.Split(sections[0], ".")
@@ -95,10 +99,6 @@ func parseCoverageLine(line string, prefix string, cutset string) (*block, bool)
 	b.endChar, _ = strconv.Atoi(end[1])
 	b.statements, _ = strconv.Atoi(parts[1])
 	b.covered, _ = strconv.Atoi(parts[2])
-	// Remove the "cutset" string from the beginning of the path if the CLI option is present.
-	if len(cutset) > 0 {
-		path[0] = strings.TrimLeft(path[0], cutset)
-	}
 	return b, true
 }
 
@@ -119,10 +119,8 @@ func parseCoverage(coverage io.Reader, prefix string, cutset string) []*block {
 func main() {
 	var cutset string
 	flag.StringVar(&cutset, "trim", "", "An optional string that will be trimmed from the front of the source file name.")
-	flag.Parse()
 	var prefix string
-	if len(os.Args) == 2 {
-		prefix = os.Args[1]
-	}
+	flag.StringVar(&prefix, "prefix", "", "An optional string that will be appended to the front of the source file name.")
+	flag.Parse()
 	lcov(parseCoverage(os.Stdin, prefix, cutset), os.Stdout)
 }
