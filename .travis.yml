@@ -1,0 +1,10 @@
+language: go
+matrix:
+  include:
+  - go: 1.x
+    env: LATEST=true
+  allow_failures:
+  - tip
+os:
+  - linux
+  - osx
