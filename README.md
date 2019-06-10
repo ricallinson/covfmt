@@ -1,6 +1,6 @@
 # covfmt
 
-[![Build Status](https://travis-ci.org/ricallinson/covfmt.svg?branch=master)](https://travis-ci.org/ricallinson/covfmt)
+[![Build Status](https://travis-ci.org/ricallinson/covfmt.svg?branch=master)](https://travis-ci.org/ricallinson/covfmt) [![Coverage Status](https://coveralls.io/repos/github/ricallinson/covfmt/badge.svg)](https://coveralls.io/github/ricallinson/covfmt)
 
 _WORK IN PROGRESS_: Utility for converting the go test coverage output into the lcov format.
 
